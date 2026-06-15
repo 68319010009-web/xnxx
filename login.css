@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Prompt', sans-serif;
+  background: linear-gradient(135deg, #ff5722, #ff7043);
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(255, 87, 34, 0.3);
+  width: 100%;
+  max-width: 360px;
+  padding: 2rem;
+}
+
+.auth-box h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #ff5722;
+  font-weight: 700;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #ff5722;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  background: #ff5722;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: white;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 1rem;
+}
+
+button:hover {
+  background: #e64a19;
+}
+
+.toggle-msg {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.toggle-link {
+  color: #ff5722;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}

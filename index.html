@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickEats - สั่งอาหารออนไลน์</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🍕 QuickEats</h1>
+            </div>
+            <nav class="nav">
+                <a href="#menu" class="nav-link">เมนู</a>
+                <a href="#about" class="nav-link">เกี่ยวกับเรา</a>
+                <button class="cart-btn" onclick="toggleCart()">
+                    🛒 ตะกร้า (<span id="cart-count">0</span>)
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>อาหารอร่อย ส่งตรงถึงบ้าน</h2>
+            <p>สั่งง่าย ส่งเร็ว ในราคาที่คุณรับได้</p>
+            <button class="cta-btn" onclick="document.getElementById('menu').scrollIntoView()">
+                สั่งอาหารเลย
+            </button>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <h2 class="section-title">เมนูยอดนิยม</h2>
+            <div class="menu-categories">
+                <button class="category-btn active" onclick="filterMenu('all')">ทั้งหมด</button>
+                <button class="category-btn" onclick="filterMenu('main')">จานหลัก</button>
+                <button class="category-btn" onclick="filterMenu('dessert')">ของหวาน</button>
+                <button class="category-btn" onclick="filterMenu('drink')">เครื่องดื่ม</button>
+            </div>
+            <div id="menu-grid" class="menu-grid">
+                <!-- Menu items will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>ตะกร้าสินค้า</h3>
+            <button class="close-btn" onclick="toggleCart()">&times;</button>
+        </div>
+        <div id="cart-items" class="cart-items">
+            <!-- Cart items will be populated by JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <div class="total-row">
+                    <span>ราคาสินค้า:</span>
+                    <span id="subtotal">฿0</span>
+                </div>
+                <div class="total-row">
+                    <span>ค่าจัดส่ง:</span>
+                    <span id="delivery-fee">฿30</span>
+                </div>
+                <div class="total-row total-final">
+                    <span>รวมทั้งหมด:</span>
+                    <span id="total">฿30</span>
+                </div>
+            </div>
+            <button class="checkout-btn" onclick="showCheckout()">สั่งซื้อ</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>กรอกข้อมูลการสั่งซื้อ</h3>
+                <button class="close-btn" onclick="closeCheckout()">&times;</button>
+            </div>
+            <form id="checkout-form" class="checkout-form">
+                <div class="form-group">
+                    <label for="customer-name">ชื่อ-นามสกุล *</label>
+                    <input type="text" id="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">เบอร์โทรศัพท์ *</label>
+                    <input type="tel" id="customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-address">ที่อยู่จัดส่ง *</label>
+                    <textarea id="customer-address" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="payment-method">วิธีการชำระเงิน *</label>
+                    <select id="payment-method" required>
+                        <option value="">เลือกวิธีการชำระเงิน</option>
+                        <option value="cash">เงินสด (ชำระปลายทาง)</option>
+                        <option value="transfer">โอนเงิน</option>
+                        <option value="card">บัตรเครดิต</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="special-notes">หมายเหตุพิเศษ</label>
+                    <textarea id="special-notes" rows="2" placeholder="เช่น ไม่ใส่ผักชี, เผ็ดน้อย"></textarea>
+                </div>
+                <div class="order-summary">
+                    <h4>สรุปการสั่งซื้อ</h4>
+                    <div id="order-summary-items"></div>
+                    <div class="summary-total">
+                        รวมทั้งหมด: <span id="checkout-total">฿0</span>
+                    </div>
+                </div>
+                <button type="submit" class="submit-order-btn">ยืนยันการสั่งซื้อ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content success-content">
+            <div class="success-icon">✅</div>
+            <h3>สั่งซื้อสำเร็จ!</h3>
+            <p>หมายเลขออเดอร์: <span id="order-number"></span></p>
+            <p>เราจะจัดส่งภายใน 30-45 นาที</p>
+            <button class="btn-primary" onclick="closeSuccess()">ตกลง</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <script src="script.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2024 QuickEats. สั่งอาหารออนไลน์ | 
+        <a href="#about">เกี่ยวกับเรา</a> | 
+        <a href="mailto:support@quickeats.com">ติดต่อเรา</a>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" title="กลับขึ้นบนสุด">↑</button>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ชำระเงิน - Mini E-Commerce</title>
+<link rel="stylesheet" href="checkout.css" />
+</head>
+<body>
+
+<header>
+  <h1>ชำระเงิน</h1>
+  <button id="backBtn">กลับหน้าร้าน</button>
+</header>
+
+<main>
+  <form id="checkoutForm">
+    <label for="fullnameInput">ชื่อ-นามสกุล</label>
+    <input type="text" id="fullnameInput" placeholder="ชื่อ-นามสกุล" required />
+
+    <label for="addressInput">ที่อยู่จัดส่ง</label>
+    <textarea id="addressInput" rows="3" placeholder="ที่อยู่" required></textarea>
+
+    <label for="phoneInput">เบอร์โทรศัพท์</label>
+    <input type="tel" id="phoneInput" placeholder="0812345678" required pattern="[0-9]{9,10}" />
+
+    <label for="paymentMethod">วิธีชำระเงิน</label>
+    <select id="paymentMethod" required>
+      <option value="" disabled selected>-- เลือกวิธีชำระเงิน --</option>
+      <option value="bank">โอนเงินผ่านธนาคาร</option>
+      <option value="cod">เก็บเงินปลายทาง</option>
+    </select>
+
+    <div id="qrSection" class="hidden">
+      <p>สแกน QR Code เพื่อชำระเงิน</p>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Qrcode-wikipedia.png/240px-Qrcode-wikipedia.png" alt="QR Code" />
+      <button type="button" id="confirmPaymentBtn">ยืนยันชำระเงิน</button>
+    </div>
+
+    <button type="submit" class="btn-primary">ยืนยันคำสั่งซื้อ</button>
+  </form>
+</main>
+
+<script>
+  let currentUser = localStorage.getItem('currentUser');
+  if(!currentUser){
+    alert('กรุณาเข้าสู่ระบบก่อน');
+    window.location.href = 'login.html';
+  }
+
+  const fullnameInput = document.getElementById('fullnameInput');
+  const addressInput = document.getElementById('addressInput');
+  const phoneInput = document.getElementById('phoneInput');
+  const paymentMethod = document.getElementById('paymentMethod');
+  const qrSection = document.getElementById('qrSection');
+  const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const backBtn = document.getElementById('backBtn');
+
+  paymentMethod.addEventListener('change', () => {
+    if(paymentMethod.value === 'bank'){
+      qrSection.classList.remove('hidden');
+    } else {
+      qrSection.classList.add('hidden');
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  checkoutForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const fullname = fullnameInput.value.trim();
+    const address = addressInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const payMethod = paymentMethod.value;
+
+    if(!fullname || !address || !phone || !payMethod){
+      alert('กรุณากรอกข้อมูลให้ครบ');
+      return;
+    }
+
+    if(payMethod === 'bank'){
+      alert('กรุณาสแกน QR Code และยืนยันชำระเงินก่อนดำเนินการต่อ');
+      return;
+    }
+
+    saveOrder(fullname, address, phone, payMethod);
+  });
+
+  confirmPaymentBtn.addEventListener('click', () => {
+    saveOrder(
+      fullnameInput.value.trim(),
+      addressInput.value.trim(),
+      phoneInput.value.trim(),
+      paymentMethod.value,
+      true
+    );
+  });
+
+  function saveOrder(fullname, address, phone, paymentMethod, paid=false){
+    let users = JSON.parse(localStorage.getItem('miniUsers') || '{}');
+    if(!users[currentUser]) {
+      alert('เกิดข้อผิดพลาด: ไม่พบผู้ใช้');
+      window.location.href = 'login.html';
+      return;
+    }
+    let cart = users[currentUser].cart || [];
+    if(cart.length === 0){
+      alert('ไม่มีสินค้าในตะกร้า');
+      window.location.href = 'index.html';
+      return;
+    }
+
+    let totalPrice = 0;
+    const products = [
+      {id: 1, name: "รองเท้าผ้าใบชาย", price: 1200},
+      {id: 2, name: "เสื้อยืดลายกราฟิก", price: 350},
+      {id: 3, name: "กางเกงยีนส์", price: 1290},
+    ];
+    let orderItems = cart.map(item => {
+      const p = products.find(pr => pr.id === item.id);
+      if(!p) return null;
+      totalPrice += p.price * item.qty;
+      return {...p, qty: item.qty};
+    }).filter(i => i !== null);
+
+    let newOrder = {
+      id: Date.now(),
+      fullname, address, phone,
+      paymentMethod,
+      paid,
+      items: orderItems,
+      totalPrice,
+      date: new Date().toLocaleString()
+    };
+
+    users[currentUser].orders = users[currentUser].orders || [];
+    users[currentUser].orders.push(newOrder);
+    users[currentUser].cart = []; // clear cart
+    localStorage.setItem('miniUsers', JSON.stringify(users));
+
+    alert('สั่งซื้อสำเร็จ!');
+    window.location.href = 'orders.html';
+  }
+</script>
+
+</body>
+</html>

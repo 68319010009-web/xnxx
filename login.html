@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>เข้าสู่ระบบ - Mini E-Commerce</title>
+<link rel="stylesheet" href="login.css" />
+</head>
+<body>
+
+<div class="container">
+  <div class="auth-box">
+    <h2 id="formTitle">เข้าสู่ระบบ</h2>
+
+    <div id="authArea">
+      <input type="text" id="usernameInput" placeholder="ชื่อผู้ใช้" />
+      <input type="password" id="passwordInput" placeholder="รหัสผ่าน" />
+      <button id="loginBtn">เข้าสู่ระบบ</button>
+      <p class="toggle-msg">ยังไม่มีบัญชี? <span id="showRegisterBtn" class="toggle-link">สมัครสมาชิก</span></p>
+    </div>
+
+    <div id="registerArea" class="hidden">
+      <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้ใหม่" />
+      <input type="password" id="regPassword" placeholder="รหัสผ่านใหม่" />
+      <button id="registerBtn">สมัครสมาชิก</button>
+      <p class="toggle-msg">มีบัญชีแล้ว? <span id="cancelRegisterBtn" class="toggle-link">เข้าสู่ระบบ</span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const authArea = document.getElementById('authArea');
+  const registerArea = document.getElementById('registerArea');
+  const formTitle = document.getElementById('formTitle');
+
+  const usernameInput = document.getElementById('usernameInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginBtn = document.getElementById('loginBtn');
+  const showRegisterBtn = document.getElementById('showRegisterBtn');
+  const regUsername = document.getElementById('regUsername');
+  const regPassword = document.getElementById('regPassword');
+  const registerBtn = document.getElementById('registerBtn');
+  const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
+
+  function registerUser(){
+    const username = regUsername.value.trim();
+    const password = regPassword.value.trim();
+    if(username.length < 3 || password.length < 3){
+      alert('ชื่อผู้ใช้และรหัสผ่านอย่างน้อย 3 ตัวอักษร');
+      return;
+    }
+    let users = JSON.parse(localStorage.getItem('miniUsers') || '{}');
+    if(users[username]){
+      alert('ชื่อผู้ใช้นี้ถูกใช้งานแล้ว');
+      return;
+    }
+    users[username] = { password, orders: [], cart: [] };
+    localStorage.setItem('miniUsers', JSON.stringify(users));
+    alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+    regUsername.value = '';
+    regPassword.value = '';
+    registerArea.classList.add('hidden');
+    authArea.classList.remove('hidden');
+    formTitle.textContent = 'เข้าสู่ระบบ';
+  }
+
+  function loginUser(){
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    if(!username || !password){
+      alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+      return;
+    }
+    const users = JSON.parse(localStorage.getItem('miniUsers') || '{}');
+    if(users[username] && users[username].password === password){
+      localStorage.setItem('currentUser', username);
+      window.location.href = 'index.html';
+    } else {
+      alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+    }
+  }
+
+  loginBtn.addEventListener('click', loginUser);
+  showRegisterBtn.addEventListener('click', () => {
+    authArea.classList.add('hidden');
+    registerArea.classList.remove('hidden');
+    formTitle.textContent = 'สมัครสมาชิก';
+  });
+  registerBtn.addEventListener('click', registerUser);
+  cancelRegisterBtn.addEventListener('click', () => {
+    registerArea.classList.add('hidden');
+    authArea.classList.remove('hidden');
+    formTitle.textContent = 'เข้าสู่ระบบ';
+  });
+</script>
+
+</body>
+</html>

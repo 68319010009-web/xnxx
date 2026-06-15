@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+
+body {
+  font-family: 'Prompt', sans-serif;
+  background: #fff8f0;
+  margin: 0;
+  padding: 0 1rem 2rem 1rem;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #ff5722;
+  color: white;
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header button {
+  background: white;
+  color: #ff5722;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+main {
+  max-width: 480px;
+  margin: 2rem auto;
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(255, 87, 34, 0.3);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  margin-top: 1rem;
+}
+
+input[type="text"],
+input[type="tel"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: 'Prompt', sans-serif;
+}
+
+textarea {
+  resize: vertical;
+}
+
+select {
+  cursor: pointer;
+}
+
+button.btn-primary {
+  width: 100%;
+  background-color: #ff5722;
+  border: none;
+  color: white;
+  padding: 0.8rem;
+  margin-top: 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.btn-primary:hover {
+  background-color: #e64a19;
+}
+
+#qrSection {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+#qrSection img {
+  width: 160px;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+}
+
+#qrSection button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#qrSection button:hover {
+  background-color: #388e3c;
+}
+
+.hidden {
+  display: none;
+}
